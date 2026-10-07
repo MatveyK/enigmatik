@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#172f35">
+    <meta name="robots" content="noindex">
+    <title>Enigmatik · Atelier enseignant</title>
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="assets/style.css">
+    <script type="module" src="assets/js/teacher.mjs"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Aller au contenu</a>
+    <header class="site-header">
+      <span class="brand"><span class="brand-mark" aria-hidden="true">e.</span> enigmatik<span class="brand-dot">.</span></span>
+      <span class="header-note">Atelier enseignant</span>
+    </header>
+    <main id="main" class="page teacher-page" tabindex="-1">
+      <div class="teacher-intro"><p class="eyebrow">Préparer le terrain</p><h1>Une enquête,<br>treize points de départ.</h1><p class="lead">Imprimez les cartes, découpez-les et placez-les aux étapes de votre jeu.</p></div>
+      <noscript><div class="notice">Activez JavaScript pour générer les QR codes.</div></noscript>
+      <form id="qr-settings" class="settings-card" novalidate>
+        <label for="base-url">Adresse du site publié</label>
+        <p class="field-help" id="url-help">Collez l’adresse de votre site, avec le nom du dépôt si nécessaire. Exemple : https://votre-compte.github.io/enigmatik/</p>
+        <div class="settings-controls"><input id="base-url" name="base" type="url" required placeholder="https://votre-compte.github.io/enigmatik/" aria-describedby="url-help url-error"><button type="submit">Générer les cartes <span aria-hidden="true">↗</span></button></div>
+        <p id="url-error" class="field-error" role="alert" hidden></p>
+        <p id="local-note" class="field-help" hidden>Adresse locale de prévisualisation : pour les QR distribués aux élèves, utilisez l’adresse publique GitHub Pages.</p>
+      </form>
+      <div class="sheet-toolbar"><p id="sheet-status" role="status" aria-live="polite">Indiquez l’adresse du site pour préparer les cartes.</p><button id="print-sheet" class="button-secondary" type="button" disabled>Imprimer / Enregistrer en PDF</button></div>
+      <section id="qr-sheet" class="qr-sheet" aria-label="Cartes à imprimer"></section>
+    </main>
+    <footer class="site-footer"><span>Chaque carte ouvre une seule étape.</span><span>Enigmatik · Atelier enseignant</span></footer>
+  </body>
+</html>
