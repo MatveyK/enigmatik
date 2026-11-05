@@ -100,6 +100,22 @@ th { background: #eff1e9; font-weight: 600; }
 .site-footer > :first-child { font-family: Georgia, serif; font-style: italic; font-size: .95rem; }
 .story-page { max-width: 920px; }
 .story-content { padding: 32px; }
+.password-card { max-width: 480px; padding: 28px; }
+.password-card .submit-answer { margin-top: 22px; }
+.chat-evidence { max-width: 540px; margin: 26px auto 0; }
+.whatsapp-chat { overflow: hidden; border: 1px solid #bccbc2; border-radius: 16px; background: #efeae2; }
+.chat-header { display: flex; align-items: center; gap: 12px; padding: 18px 20px; background: #075e54; color: white; }
+.chat-avatar { display: grid; place-items: center; flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; background: #dce9e2; color: #075e54; font-weight: 700; }
+.chat-contact { min-width: 0; }
+.chat-contact-name { font-weight: 650; }
+.chat-app { font-size: .72rem; color: #d8eeea; }
+.chat-messages { display: flex; flex-direction: column; gap: 12px; padding: 22px 18px 16px; margin: 0; list-style: none; }
+.chat-message { align-self: flex-start; max-width: 88%; padding: 10px 12px 7px; border-radius: 0 9px 9px; background: white; color: #20312d; box-shadow: 0 1px 1px #172f351a; overflow-wrap: anywhere; }
+.chat-message-outgoing { align-self: flex-end; border-radius: 9px 0 9px 9px; background: #d9fdd3; }
+.chat-sender { margin-bottom: 3px; color: #075e54; font-size: .7rem; font-weight: 700; }
+.chat-text { font-size: .9rem; line-height: 1.5; }
+.chat-time { display: block; margin-top: 4px; text-align: right; font-size: .65rem; color: #53635e; }
+.chat-excerpt-end { padding: 0 18px 20px; text-align: center; color: #53635e; font-size: .72rem; }
 .story-image { margin: 26px 0; }
 .story-image img { display: block; width: 100%; height: auto; border-radius: 3px; }
 figcaption { font-size: .74rem; color: var(--muted); margin-top: 8px; }
@@ -159,7 +175,7 @@ summary { cursor: pointer; font-size: .88rem; font-weight: 600; padding-block: 6
   .page { padding-top: 34px; padding-bottom: 48px; }
   .puzzle-layout { grid-template-columns: minmax(0, 1fr); }
   .metadata { margin-bottom: 24px; padding-bottom: 20px; }
-  .evidence, .answer-card, .story-content { padding: 22px; }
+  .evidence, .answer-card, .story-content, .password-card { padding: 22px; }
   .section-label { margin-bottom: 18px; }
   .site-footer { align-items: flex-start; flex-direction: column; gap: 7px; }
   .settings-controls, .sheet-toolbar { align-items: stretch; flex-direction: column; }
@@ -170,7 +186,10 @@ summary { cursor: pointer; font-size: .88rem; font-weight: 600; padding-block: 6
 @media (max-width: 420px) {
   .site-header, .site-footer { margin-inline: 18px; }
   .page { padding-inline: 18px; }
-  .evidence, .answer-card, .story-content { padding: 18px; }
+  .evidence, .answer-card, .story-content, .password-card { padding: 18px; }
+  .chat-header { padding: 14px 12px; }
+  .chat-messages { padding: 16px 10px; }
+  .chat-message { max-width: 94%; }
   .metadata { align-items: flex-start; flex-direction: column; gap: 6px; }
   .qr-sheet { grid-template-columns: minmax(0, 1fr); }
   pre { padding: 14px 12px; font-size: .73rem; }

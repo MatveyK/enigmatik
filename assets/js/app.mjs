@@ -152,10 +152,50 @@ function renderRiddle(riddle) {
 function renderStory(story) {
   document.title = `${story.title} — Enigmatik`;
   main.classList.add("story-page");
-  header("L’enquête / Fragment d’histoire", story.title, story.subtitle);
+  header(`L’enquête / ${story.category || "Fragment d’histoire"}`, story.title, story.subtitle);
   const article = el("article", "story-content paper");
   article.append(renderBlocks(story.content), el("p", "station-note", "La suite se trouve sur le terrain. Gardez les yeux ouverts."));
   main.append(article);
+}
+
+function renderLockedStory(story) {
+  document.title = "Conversation verrouillée — Enigmatik";
+  main.classList.add("story-page");
+  header("L’enquête / Accès verrouillé", "Une conversation sous clé.", "Entrez le mot de passe pour consulter cette pièce à conviction.");
+  const form = el("form", "password-card paper");
+  form.noValidate = true;
+  const field = inputField("story-password", "Mot de passe", { type: "password", help: "Respectez les majuscules et les minuscules." });
+  const input = field.querySelector("input");
+  input.autocapitalize = "none";
+  input.setAttribute("aria-describedby", "story-password-help story-password-error");
+  const error = el("p", "field-error");
+  error.id = "story-password-error";
+  error.setAttribute("role", "alert");
+  error.hidden = true;
+  const submit = el("button", "submit-answer", "Déverrouiller la conversation");
+  submit.type = "submit";
+  form.append(field, error, submit);
+  form.addEventListener("input", () => {
+    error.hidden = true;
+    input.removeAttribute("aria-invalid");
+  });
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (input.value !== story.password) {
+      error.textContent = input.value ? "Mot de passe incorrect. Réessayez." : "Entrez le mot de passe pour continuer.";
+      error.hidden = false;
+      input.setAttribute("aria-invalid", "true");
+      input.focus();
+      return;
+    }
+    // This is a game lock on a static site; no unlock state is persisted.
+    main.replaceChildren();
+    renderStory(story);
+    const title = main.querySelector("h1");
+    title.tabIndex = -1;
+    title.focus();
+  });
+  main.append(form);
 }
 
 function renderWelcome(missing = false) {
@@ -173,5 +213,8 @@ function renderWelcome(missing = false) {
 
 const page = resolvePage(window.location.search, riddles, stories);
 if (page.type === "riddle") renderRiddle(page.item);
-else if (page.type === "story") renderStory(page.item);
+else if (page.type === "story") {
+  if (page.item.password) renderLockedStory(page.item);
+  else renderStory(page.item);
+}
 else renderWelcome(page.type === "missing");

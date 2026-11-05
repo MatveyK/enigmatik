@@ -107,4 +107,25 @@ export const stories = [
       text("Le message s’arrête. Le vieux tunnel pourrait être la prochaine piste. Notez ce que vous venez d’apprendre, puis poursuivez votre enquête sur le terrain."),
     ],
   },
+  {
+    id: "conversation-justine", title: "Le parfum de trop", subtitle: "Une conversation retrouvée sur le téléphone de Justine",
+    category: "Pièce à conviction", password: "Justine12",
+    content: [
+      text("Pièce 14 · Extrait d’une conversation WhatsApp entre Justine et son copain, retrouvé sur le téléphone de Justine."),
+      {
+        type: "chat", contact: "Son copain", owner: "Justine",
+        messages: [
+          { sender: "Justine", time: "21:14", text: "J’ai récupéré ton pull tout à l’heure. Il sentait un parfum que je connais très bien." },
+          { sender: "Son copain", time: "21:14", text: "Quel parfum ?" },
+          { sender: "Justine", time: "21:15", text: "Celui de ma meilleure copine. Je le reconnaîtrais entre mille." },
+          { sender: "Son copain", time: "21:16", text: "On s’est croisés aujourd’hui, c’est tout." },
+          { sender: "Justine", time: "21:16", text: "Juste croisés ? Son parfum est resté sur ton pull. Tu me trompes avec elle ?" },
+          { sender: "Son copain", time: "21:17", text: "Non, Justine. Ce n’est pas ce que tu crois. Laisse-moi t’expliquer." },
+          { sender: "Justine", time: "21:18", text: "C’est ma meilleure copine… Je vous faisais confiance à tous les deux." },
+          { sender: "Son copain", time: "21:19", text: "On peut se voir pour en parler ?" },
+          { sender: "Justine", time: "21:20", text: "Pas ce soir. J’ai besoin de réfléchir." },
+        ],
+      },
+    ],
+  },
 ];

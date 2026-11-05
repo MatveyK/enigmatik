@@ -16,6 +16,29 @@ export function renderBlocks(blocks = []) {
         node.append(el("code", "", block.text)); // Never interpret the HTML puzzle as markup.
         break;
       case "quote": node = el("blockquote", "", block.text); break;
+      case "chat": {
+        node = el("figure", "chat-evidence");
+        node.setAttribute("aria-label", `Conversation WhatsApp entre ${block.owner} et ${block.contact.toLocaleLowerCase("fr")}`);
+        const chat = el("div", "whatsapp-chat");
+        const header = el("div", "chat-header");
+        const avatar = el("span", "chat-avatar", block.contact.charAt(0));
+        avatar.setAttribute("aria-hidden", "true");
+        const contact = el("div", "chat-contact");
+        contact.append(el("p", "chat-contact-name", block.contact), el("p", "chat-app", `WhatsApp · Téléphone de ${block.owner}`));
+        header.append(avatar, contact);
+        const messages = el("ol", "chat-messages");
+        messages.setAttribute("aria-label", "Messages dans l’ordre chronologique");
+        for (const message of block.messages) {
+          const bubble = el("li", `chat-message${message.sender === block.owner ? " chat-message-outgoing" : ""}`);
+          const time = el("time", "chat-time", message.time);
+          time.dateTime = message.time;
+          bubble.append(el("p", "chat-sender", message.sender), el("p", "chat-text", message.text), time);
+          messages.append(bubble);
+        }
+        chat.append(header, messages, el("p", "chat-excerpt-end", "Fin de l’extrait"));
+        node.append(chat, el("figcaption", "", `Extrait de la conversation · Les messages de ${block.owner} apparaissent en vert.`));
+        break;
+      }
       case "table": {
         node = el("div", "table-wrap");
         const table = el("table");

@@ -24,7 +24,7 @@ function generateCards() {
       qr.addData(url, "Byte");
       qr.make();
       const card = el("article", "qr-card");
-      const label = station.kind === "riddle" ? `Énigme ${station.id}` : "Fragment d’histoire";
+      const label = station.kind === "riddle" ? `Énigme ${station.id}` : station.category || "Fragment d’histoire";
       card.append(el("p", "eyebrow", `Enigmatik / ${label}`), el("h2", "", station.title));
       const graphic = el("div", "qr-image");
       // SVG comes only from the bundled generator, never from user markup.
@@ -42,7 +42,7 @@ function generateCards() {
     const hostname = new URL(base).hostname;
     localNote.hidden = !["localhost", "127.0.0.1", "[::1]"].includes(hostname);
     print.disabled = false;
-    status.textContent = `${stations.length} cartes prêtes · ${riddles.length} énigmes + ${stories.length} fragment d’histoire`;
+    status.textContent = `${stations.length} cartes prêtes · ${riddles.length} énigmes + ${stories.length} fragments d’histoire`;
   } catch (cause) {
     sheet.replaceChildren();
     print.disabled = true;

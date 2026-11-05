@@ -15,7 +15,7 @@ const correct = {
 
 test("all 12 stations are present with stable, unique identifiers", () => {
   assert.deepEqual(riddles.map(({ id }) => id), Object.keys(correct).sort());
-  assert.equal(stories.length, 1);
+  assert.deepEqual(stories.map(({ id }) => id), ["message-audio", "conversation-justine"]);
   for (const riddle of riddles) {
     assert.equal(riddle.specialCode, "TODO");
     assert.ok(riddle.explanation.length);
@@ -89,7 +89,7 @@ test("compression exercise decodes into a 5×5 seven and agrees with the source 
 
 test("direct URLs resolve riddles and stories; ambiguous and unknown IDs fail safely", () => {
   for (const riddle of riddles) assert.equal(resolvePage(`?enigme=${riddle.id}`, riddles, stories).item, riddle);
-  assert.equal(resolvePage("?histoire=message-audio", riddles, stories).item, stories[0]);
+  for (const story of stories) assert.equal(resolvePage(`?histoire=${story.id}`, riddles, stories).item, story);
   assert.equal(resolvePage("", riddles, stories).type, "home");
   for (const search of ["?enigme=99", "?enigme=", "?enigme=01&histoire=message-audio", "?enigme=01&enigme=02", "?histoire=absent", "?enigme=%3Cscript%3E"]) assert.equal(resolvePage(search, riddles, stories).type, "missing");
 });

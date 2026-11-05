@@ -1,6 +1,6 @@
 # Enigmatik
 
-Un jeu d’enquête en français pour des élèves de 15–16 ans : **12 énigmes informatiques**, **un fragment d’histoire avec narration audio**, et une **planche de QR codes à imprimer**.
+Un jeu d’enquête en français pour des élèves de 15–16 ans : **12 énigmes informatiques**, **un fragment d’histoire avec narration audio**, **une conversation WhatsApp à déverrouiller**, et une **planche de 14 QR codes à imprimer**.
 
 Le site utilise uniquement HTML, CSS et JavaScript. Aucun compte, serveur applicatif, service externe, gestionnaire de paquets ou étape de compilation n’est nécessaire pour le publier. Les médias et le générateur de QR codes sont inclus dans le projet.
 
@@ -17,6 +17,7 @@ Ouvrir ensuite :
 - Accueil : <http://localhost:8000/>
 - Première énigme : <http://localhost:8000/index.html?enigme=01>
 - Histoire audio : <http://localhost:8000/index.html?histoire=message-audio>
+- Conversation de Justine : <http://localhost:8000/index.html?histoire=conversation-justine> (mot de passe : `Justine12`)
 - Atelier enseignant : <http://localhost:8000/enseignant.html>
 
 Utiliser le serveur local plutôt qu’un double-clic sur les fichiers HTML : les modules JavaScript sont chargés via HTTP. Ce serveur ne sert que les fichiers et n’ajoute aucun backend au jeu. Arrêter le serveur avec `Ctrl+C`.
@@ -46,7 +47,7 @@ Références : [création d’un site](https://docs.github.com/en/pages/getting-
 
 1. Ouvrir la page `enseignant.html`. Sur le site publié, son adresse de base est préremplie.
 2. Vérifier l’adresse publique complète, **y compris le nom du dépôt**. Une adresse `localhost` ne fonctionnera pas depuis le téléphone d’un élève.
-3. Cliquer sur **Générer les cartes**. La planche contient 12 énigmes et un fragment d’histoire ; chaque carte comporte le titre et son URL.
+3. Cliquer sur **Générer les cartes**. La planche contient 12 énigmes, un fragment d’histoire audio et la pièce à conviction « Le parfum de trop » ; chaque carte comporte le titre et son URL. Le QR de la conversation ouvre son écran verrouillé et ne contient pas le mot de passe.
 4. Cliquer sur **Imprimer / Enregistrer en PDF**. Le format prévu est **A4 portrait**, à l’échelle **100 %**, avec quatre cartes par page. Désactiver les en-têtes et pieds de page ajoutés par le navigateur.
 5. Tester un QR code avec un téléphone avant de distribuer les cartes.
 
@@ -111,6 +112,14 @@ node scripts/generate-audio.mjs
 ```
 
 Ce script est un outil facultatif de création ; il n’est pas utilisé par le site publié. Le fichier MP3 est déjà inclus.
+
+### La conversation de Justine
+
+La page `index.html?histoire=conversation-justine` demande le mot de passe **`Justine12`**, avec cette casse exacte, à chaque ouverture ou rechargement. Une saisie vide ou incorrecte laisse la conversation verrouillée. Après déverrouillage, elle présente un extrait WhatsApp dans lequel Justine accuse son copain de la tromper après avoir reconnu le parfum de sa meilleure copine sur son pull.
+
+L’objet `conversation-justine` dans `stories` définit le mot de passe, le titre et les messages. Le bloc `chat` contient `owner` (Justine), `contact` (son copain) et une liste `messages` ; chaque message possède `sender`, `time` et `text`. Les messages de `owner` apparaissent à droite, en vert. La carte « Le parfum de trop » est incluse automatiquement dans la planche enseignant.
+
+Ce verrou fait partie du jeu : la vérification s’effectue dans le navigateur, et le mot de passe ainsi que les messages restent accessibles dans le code source. Il ne convient pas à la protection de données confidentielles. Aucun déverrouillage n’est enregistré.
 
 ## Vérifier les réponses
 
