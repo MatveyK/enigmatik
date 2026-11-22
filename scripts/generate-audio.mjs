@@ -1,10 +1,11 @@
-// Optional authoring utility for macOS. The site only needs the committed MP3.
+// Optional macOS utility for regenerating the original demo recording.
 import { mkdtempSync, writeFileSync, rmSync, mkdirSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
-import { audioTranscript } from "../assets/js/data.mjs";
+
+const audioTranscript = "Si vous écoutez ce message, c’est que vous avez retrouvé mon téléphone. Je n’ai pas pu rejoindre la gare. Quelqu’un m’attendait près de l’entrée principale. J’ai fait demi-tour et je suis passé par le café. Cherchez le vieux tunnel, derrière le bâtiment. J’y ai laissé une enveloppe. Ne tirez pas de conclusions trop vite : un téléphone peut changer de mains. Suivez les indices. Je compte sur vous.";
 
 const temp = mkdtempSync(join(tmpdir(), "enigmatik-audio-"));
 const output = fileURLToPath(new URL("../assets/audio/message-retrouve.mp3", import.meta.url));

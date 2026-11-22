@@ -1,5 +1,5 @@
 import qrcode from "../vendor/qrcode.mjs";
-import { riddles, stories } from "./data.mjs";
+import { stories } from "./data.mjs";
 import { normalizeBaseUrl, stationUrl } from "./engine.mjs";
 import { el } from "./view.mjs";
 
@@ -10,7 +10,6 @@ const sheet = document.querySelector("#qr-sheet");
 const print = document.querySelector("#print-sheet");
 const status = document.querySelector("#sheet-status");
 const localNote = document.querySelector("#local-note");
-const stations = [...riddles.map((riddle) => ({ ...riddle, kind: "riddle" })), ...stories.map((story) => ({ ...story, kind: "story" }))];
 
 function generateCards() {
   error.hidden = true;
@@ -18,23 +17,28 @@ function generateCards() {
   try {
     const base = normalizeBaseUrl(input.value);
     const cards = document.createDocumentFragment();
-    for (const station of stations) {
-      const url = stationUrl(base, station.kind, station.id);
+    for (const [index, story] of stories.entries()) {
+      const url = stationUrl(base, story.id);
       const qr = qrcode(0, "M");
       qr.addData(url, "Byte");
       qr.make();
       const card = el("article", "qr-card");
-      const label = station.kind === "riddle" ? `Énigme ${station.id}` : station.category || "Fragment d’histoire";
-      card.append(el("p", "eyebrow", `Enigmatik / ${label}`), el("h2", "", station.title));
+      const label = `Carte ${index + 1}`;
+      card.append(el("p", "eyebrow", label), el("h2", "", story.title));
       const graphic = el("div", "qr-image");
+      const svg = qr.createSvgTag({
+        cellSize: 4, margin: 16,
+        title: { text: `${label} · ${story.title}`, id: `qr-${story.id}` },
+      });
       // SVG comes only from the bundled generator, never from user markup.
-      graphic.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 16, scalable: true });
-      const svg = graphic.querySelector("svg");
-      svg.setAttribute("role", "img");
-      svg.setAttribute("aria-label", `QR code : ${label}, ${station.title}`);
+      graphic.innerHTML = svg;
+      const download = el("a", "qr-download", "Télécharger le QR code (SVG)");
+      download.href = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      download.download = `${String(index + 1).padStart(2, "0")}-${story.id}.svg`;
+      download.setAttribute("aria-label", `Télécharger le QR code (SVG) · ${story.title}`);
       const link = el("a", "qr-link", url);
       link.href = url;
-      card.append(graphic, el("p", "qr-instruction", "Scannez. Observez. À vous de jouer."), link);
+      card.append(graphic, el("p", "qr-instruction", "Scannez après avoir résolu la question sur votre carte."), link, download);
       cards.append(card);
     }
     sheet.replaceChildren(cards);
@@ -42,7 +46,7 @@ function generateCards() {
     const hostname = new URL(base).hostname;
     localNote.hidden = !["localhost", "127.0.0.1", "[::1]"].includes(hostname);
     print.disabled = false;
-    status.textContent = `${stations.length} cartes prêtes · ${riddles.length} énigmes + ${stories.length} fragments d’histoire`;
+    status.textContent = `${stories.length} QR codes prêts à imprimer ou à télécharger.`;
   } catch (cause) {
     sheet.replaceChildren();
     print.disabled = true;

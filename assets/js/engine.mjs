@@ -1,42 +1,16 @@
-export function normalizeText(value) {
-  return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .toLocaleLowerCase("fr").trim().replace(/[.!?…]+$/u, "").trim().replace(/\s+/g, " ");
+export function acceptsPassword(story, value) {
+  const answer = value.trim();
+  return answer.length > 0 && story.passwords.some((password) => password.trim() === answer);
 }
 
-function normalizeTime(value) {
-  const normalized = normalizeText(value);
-  const parts = normalized.match(/^(\d{1,2})\s*(?:h|:)\s*(\d{2})$/);
-  if (!parts || Number(parts[1]) > 23 || Number(parts[2]) > 59) return null;
-  return `${Number(parts[1])}:${parts[2]}`;
-}
-
-export function normalizeRoute(value) {
-  return normalizeText(value).replace(/(?:->|→|⇒|⟶|>|[-–—,;/])/g, " ").replace(/\s+/g, " ").trim();
-}
-
-// The result distinguishes missing input from a submitted incorrect answer.
-export function checkAnswer(riddle, values) {
-  if (riddle.type === "route") {
-    if (!String(values.route ?? "").trim() || !String(values.minutes ?? "").trim()) return { complete: false, correct: false };
-    return { complete: true, correct: normalizeRoute(values.route) === normalizeRoute(riddle.correctRoute.join(" → ")) && Number(values.minutes) === riddle.correctMinutes };
-  }
-  if (!String(values.answer ?? "").trim()) return { complete: false, correct: false };
-  if (riddle.type === "choice") return { complete: true, correct: values.answer === riddle.correctChoice };
-  const normalize = riddle.match === "time" ? normalizeTime : normalizeText;
-  const answer = normalize(values.answer);
-  return { complete: true, correct: answer !== null && riddle.acceptedAnswers.some((accepted) => normalize(accepted) === answer) };
-}
-
-export function resolvePage(search, riddles, stories) {
+export function resolvePage(search, stories) {
   const params = new URLSearchParams(search);
-  const hasRiddle = params.has("enigme");
-  const hasStory = params.has("histoire");
-  if (!hasRiddle && !hasStory) return { type: "home" };
-  if (hasRiddle && hasStory) return { type: "missing" };
-  const key = hasRiddle ? "enigme" : "histoire";
-  if (params.getAll(key).length !== 1) return { type: "missing" };
-  const item = (hasRiddle ? riddles : stories).find(({ id }) => id === params.get(key));
-  return item ? { type: hasRiddle ? "riddle" : "story", item } : { type: "missing" };
+  if (params.has("enigme")) return { type: "missing" };
+  const ids = params.getAll("histoire");
+  if (ids.length === 0) return { type: "home" };
+  if (ids.length !== 1) return { type: "missing" };
+  const item = stories.find((story) => story.id === ids[0]);
+  return item ? { type: "story", item } : { type: "missing" };
 }
 
 export function normalizeBaseUrl(value) {
@@ -50,8 +24,8 @@ export function normalizeBaseUrl(value) {
   return url.href;
 }
 
-export function stationUrl(base, kind, id) {
+export function stationUrl(base, id) {
   const url = new URL("index.html", normalizeBaseUrl(base));
-  url.searchParams.set(kind === "riddle" ? "enigme" : "histoire", id);
+  url.searchParams.set("histoire", id);
   return url.href;
 }
